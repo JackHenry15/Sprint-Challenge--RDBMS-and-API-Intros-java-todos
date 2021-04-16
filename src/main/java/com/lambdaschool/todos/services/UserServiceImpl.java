@@ -1,5 +1,6 @@
 package com.lambdaschool.todos.services;
 
+import com.lambdaschool.todos.models.Todos;
 import com.lambdaschool.todos.models.User;
 import com.lambdaschool.todos.repository.UserRepository;
 import com.lambdaschool.todos.views.UserNameCountTodos;
@@ -61,15 +62,25 @@ public class UserServiceImpl implements UserService
 
     @Transactional
     @Override
-    public User save(User user)
-    {
+    public User save(User user) {
         User newUser = new User();
 
         newUser.setUsername(user.getUsername()
-            .toLowerCase());
+                .toLowerCase());
         newUser.setPassword(user.getPassword());
         newUser.setPrimaryemail(user.getPrimaryemail()
-            .toLowerCase());
+                .toLowerCase());
+        newUser.getTodos().clear();
+        for (Todos t : user.getTodos())
+        {
+            Todos newTodo = new Todos();
+            newTodo.setTodoid(t.getTodoid());
+            newTodo.setDescription(t.getDescription());
+            newTodo.setUser(newUser);
+            newTodo.setCompleted(t.isCompleted());
+
+            newUser.getTodos().add(newTodo);
+        }
 
         return userrepos.save(newUser);
     }

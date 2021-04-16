@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Todos")
+@Table(name = "todos")
 @JsonIgnoreProperties(value="completed")
 public class Todos extends Auditable {
     @Id
@@ -20,14 +20,21 @@ public class Todos extends Auditable {
 
     @ManyToOne
     @JoinColumn(name = "userid", nullable = false)
-    @JsonIgnoreProperties(value = "users", allowSetters = true)
+    @JsonIgnoreProperties(value = "todos", allowSetters = true)
     private User user;
 
     public Todos() {
     }
 
-    public Todos(User user){
+//    public Todos(User user){
+//        this.user = user;
+//    }
+
+
+    public Todos( User user, String description) {
         this.user = user;
+        this.description = description;
+
     }
 
     public long getTodoid() {
@@ -51,7 +58,8 @@ public class Todos extends Auditable {
     }
 
     public void setCompleted(boolean completed) {
-        this.completed = completed = true;
+        completed = true;
+        this.completed = completed;
     }
 
     public User getUser() {
